@@ -1,0 +1,13 @@
+{% for r in records %}
+    <div class="row">
+        <a href="{% url "web_site:document" r.id %}"><h3>{{ r.title }}</h3></a>
+        <select data-engine="{{ engine }}" data-document="{{ r.pk }}" data-role="result" data-position="{{ forloop.counter }}">
+            <option disabled selected value> -- Оцените релевантность запросу -- </option>
+            {% for level in relevance_levels %}
+                <option value="{{ level.0 }}">{{ level.1 }}</option>
+            {% endfor %}
+        </select>
+
+        <p>{{ r.content|truncatechars_html:300|safe }}</p>
+    </div>
+{% endfor %}

@@ -1,0 +1,19 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Эксперимет по сравнения с эталоном</title>
+
+    <link rel=stylesheet type=text/css href="{% static "web_site/bootstrap.min.css" %}">
+    <script src="{% static "web_site/jquery.js" %}"></script>
+    <script src="{% static "web_site/bootstrap.min.js" %}"></script>
+</head>
+<body>
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

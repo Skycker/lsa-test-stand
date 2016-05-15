@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <h1>Поиск по документам</h1>
+
+        <form method="get" action="{% url "web_site:search" %}">
+            <div class="form-group">
+                <input class="form-control" name="q" id="q" value="{{ query }}" type="text">
+                {% csrf_token %}
+            </div>
+            <button type="submit" class="btn btn-default">Начать поиск</button>
+            {% if query %}
+                <button type="button" class="btn btn-default" id="save">Сохранить результаты
+                </button>
+            {% endif %}
+        </form>
+    </div>
+
+    {% if query %}
+        <hr/>
+
+        <div class="row">
+            <div class="col-lg-6">
+                {% with records=results.0.records engine=results.0.engine %}
+                    {% include "web_site/includes/search-item.html" %}
+                {% endwith %}
+            </div>
+            <div class="col-lg-6">
+                {% with records=results.1.records engine=results.1.engine %}
+                    {% include "web_site/includes/search-item.html" %}
+                {% endwith %}
+            </div>
+        </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            var saveButton = $("#save");
+            saveButton.click(function () {
+                var results = $('select[data-role="result"]');
+                var marks = [];
+                var marked = 0;
+                results.each(function (i) {
+                    console.log(i, this);
+                    {#                    res = $(res);#}
+                    var res = $(this);
+                    var value = res.val();
+                    if (value) {
+                        marked++
+                    }
+                    marks.push({
+                        "engine": res.data("engine"),
+                        "document": res.data("document"),
+                        "relevance": value,
+                        "position": res.data("position")
+                    })
+                });
+                if (marked != marks.length) {
+                    alert("Не всем результатам проставлена релевантность")
+                } else {
+
+
+                    $.ajax({
+                        url: {% url "web_site:save" %},
+                        type: "POST",
+                        data: {
+                            "query": $("#q").val(),
+                            "marks": JSON.stringify(marks),
+                            "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val()
+                        },
+                        success: function () {
+                            window.location.search = '';
+                        }
+
+                    })
+                }
+            })
+        })
+    </script>
+{% endblock %}
