@@ -2,12 +2,56 @@
 
 {% block content %}
     <div class="row">
+
+        <div class="spoiler">
+            <div class="spoiler-trigger"><em>Интструкция-описание</em></div>
+            <div class="spoiler-body collapse">
+                <p class="lead">
+                    Данный сайт представляет собой тестовый стенд одной магистерской работы. На данный момент нужно
+                    сравнить
+                    собственное поделие с эталоной машиной полнотестового поиска, в качестве которой выступает Sphinx
+                    search
+                    engine. На каждый поисковый запрос будут отображены две колонки результатов: одна - поисковая
+                    выборка от
+                    сфинкса,
+                    вторая - от кастомного кода. Колонки иногда меняются местами, событие смены - случайное.
+                </p>
+
+                <p class="lead">
+                    Поиск - сфера сложная и для подсчета метрик качетсва необходимы экспертные оценки релевантности
+                    поисковой выдачи. Сегодня вы среди экспертов!
+                    Каждый результат обеих выдач необходимо оченить по 4х-бальной шкале. После оценки необходимо
+                    отправить результаты в базу, нажав "Сохранить результаты"
+                </p>
+                <ul class="lead">
+                    <li>
+                        не релевантный (документ явно
+                        лишний для запроса)
+                    </li>
+                    <li>
+                        немного соответствует
+                        запросу (в тексте есть нужные упоминания, но в целом он про другое)
+                    </li>
+                    <li>
+                        по большей степени
+                        соответсвует
+                        запросу (предмет запроса среди основных тем документа)
+                    </li>
+                    <li>
+                        совершенно релевантный
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
         <h1>Поиск по документам</h1>
 
         <form method="get" action="{% url "web_site:search" %}">
             <div class="form-group">
-                <input class="form-control" name="q" id="q" value="{{ query }}" type="text">
-                {% csrf_token %}
+                <input class="form-control" name="q" id="q" value="{{ query }}" type="text"
+                       placeholder="про космос, программирование или старые свитки">
+
             </div>
             <button type="submit" class="btn btn-default">Начать поиск</button>
             {% if query %}
@@ -15,6 +59,7 @@
                 </button>
             {% endif %}
         </form>
+        {% csrf_token %}
     </div>
 
     {% if query %}
@@ -34,16 +79,52 @@
         </div>
     {% endif %}
 
+    <div class="modal fade bs-example-modal-sm" id="incomplete-modal" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Оповещение</h4>
+                </div>
+                <div class="modal-body">
+                    Не всем результатам проставлена релевантность
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-sm" id="success-modal" tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel2">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mySmallModalLabel2">Оповещение</h4>
+                </div>
+                <div class="modal-body">
+                    Спасибо! а теперь еще один поисковый запрос ;)
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
+            $(".spoiler-trigger").on('click', function (e) {
+                e.preventDefault();
+                $(this).parent().children('.spoiler-body').collapse('toggle')
+            });
+
+
             var saveButton = $("#save");
             saveButton.click(function () {
                 var results = $('select[data-role="result"]');
                 var marks = [];
                 var marked = 0;
                 results.each(function (i) {
-                    console.log(i, this);
-                    {#                    res = $(res);#}
                     var res = $(this);
                     var value = res.val();
                     if (value) {
@@ -57,9 +138,8 @@
                     })
                 });
                 if (marked != marks.length) {
-                    alert("Не всем результатам проставлена релевантность")
+                    $("#incomplete-modal").modal()
                 } else {
-
 
                     $.ajax({
                         url: {% url "web_site:save" %},
@@ -70,6 +150,7 @@
                             "csrfmiddlewaretoken": $('input[name="csrfmiddlewaretoken"]').val()
                         },
                         success: function () {
+                            $("#success-modal").modal();
                             window.location.search = '';
                         }
 
