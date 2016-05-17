@@ -2,4 +2,5 @@ venv/
 .idea/
 indexes*/
 local_settings.py
+*.pyc
 

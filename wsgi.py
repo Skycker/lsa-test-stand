@@ -1,0 +1,1 @@
+./lsa_test_stand/wsgi.py
