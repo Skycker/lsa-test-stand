@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+
+        <h3>Точность (Precision)</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Средняя слаборелевантная точность (LSA)</th>
+                <th>Средняя слаборелевантная точность (Sphinx)</th>
+                <th>Среднее отклонение слаборелевантной точности, абс</th>
+                <th>Среднее отклонение слаборелевантной точности, %</th>
+
+                <th>Средняя сильнорелевантная точность (LSA)</th>
+                <th>Средняя сильнорелевантная точность (Sphinx)</th>
+                <th>Среднее отклонение сильнорелевантной точности, абс</th>
+                <th>Среднее отклонение сильнорелевантной точности, %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ avg_lsa_weak_precision|floatformat:2 }}</td>
+                <td>{{ avg_ideal_weak_precision|floatformat:2 }}</td>
+                <td>{{ avg_week_prec_delta|floatformat:2 }}</td>
+                <td>{{ avg_week_prec_delta_percent|floatformat:2 }}</td>
+                <td>{{ avg_lsa_strong_precision|floatformat:2 }}</td>
+                <td>{{ avg_ideal_strong_precision|floatformat:2 }}</td>
+                <td>{{ avg_strong_prec_delta|floatformat:2 }}</td>
+                <td>{{ avg_strong_prec_delta_percent|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>Усредненная средняя точность (Mean average precision)</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Средняя слаборелевантная MAP (LSA)</th>
+                <th>Средняя слаборелевантная MAP (Sphinx)</th>
+                <th>Среднее отклонение слаборелевантной MAP, абс</th>
+                <th>Среднее отклонение слаборелевантной MAP, %</th>
+
+                <th>Средняя сильнорелевантная MAP (LSA)</th>
+                <th>Средняя сильнорелевантная MAP (Sphinx)</th>
+                <th>Среднее отклонение сильнорелевантной MAP, абс</th>
+                <th>Среднее отклонение сильнорелевантной MAP, %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ lsa_weak_map|floatformat:2 }}</td>
+                <td>{{ ideal_weak_map|floatformat:2 }}</td>
+                <td>{{ lsa_weak_map_delta|floatformat:2 }}</td>
+                <td>{{ lsa_weak_map_delta_percent|floatformat:2 }}</td>
+                <td>{{ lsa_strong_map|floatformat:2 }}</td>
+                <td>{{ ideal_strong_map|floatformat:2 }}</td>
+                <td>{{ lsa_strong_map_delta|floatformat:2 }}</td>
+                <td>{{ lsa_strong_map_delta_percent|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h3>NDCG (Discounted Cumulative Gain)</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Средняя NDCG (LSA)</th>
+                <th>Средняя NDCG (Sphinx)</th>
+                <th>Среднее отклонение NDCG, абс</th>
+                <th>Среднее отклонение NDCG, %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ avg_lsa_ndcg|floatformat:2 }}</td>
+                <td>{{ avg_ideal_ndcg|floatformat:2 }}</td>
+                <td>{{ avg_ndcg_delta|floatformat:2 }}</td>
+                <td>{{ avg_ndcg_delta_percent|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <h3>Усредненная ценность ответа (Mean Reciprocal Rank)</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Средняя слаборелевантная MRR (LSA)</th>
+                <th>Средняя слаборелевантная MRR (Sphinx)</th>
+                <th>Среднее отклонение слаборелевантной MRR, абс</th>
+                <th>Среднее отклонение слаборелевантной MRR, %</th>
+
+                <th>Средняя сильнорелевантная MRR (LSA)</th>
+                <th>Средняя сильнорелевантная MRR (Sphinx)</th>
+                <th>Среднее отклонение сильнорелевантной MRR, абс</th>
+                <th>Среднее отклонение сильнорелевантной MRR, %</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ avg_lsa_weak_mrr|floatformat:2 }}</td>
+                <td>{{ avg_ideal_weak_mrr|floatformat:2 }}</td>
+                <td>{{ lsa_weak_mrr_delta|floatformat:2 }}</td>
+                <td>{{ lsa_weak_mrr_delta_percent|floatformat:2 }}</td>
+                <td>{{ avg_lsa_strong_mrr|floatformat:2 }}</td>
+                <td>{{ avg_ideal_strong_mrr|floatformat:2 }}</td>
+                <td>{{ lsa_strong_mrr_delta|floatformat:2 }}</td>
+                <td>{{ lsa_strong_mrr_delta_percent|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

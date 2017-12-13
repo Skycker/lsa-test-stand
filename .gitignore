@@ -3,4 +3,5 @@ venv/
 indexes*/
 local_settings.py
 *.pyc
+index_7500/
 

@@ -138,9 +138,9 @@ except ImportError:
 
 db_settings = DATABASES['default']
 INDEX_SETTINGS = {
-    'latent_dimensions': 3, 'index_backend': 'lsa.keeper.backends.JsonIndexBackend',
-    'relevance_radius_threshold': 0.05,
-    "keep_index_info": {'path_to_index_folder': os.path.join(BASE_DIR, "indexes")},
+    'latent_dimensions': 150, 'index_backend': 'lsa.keeper.backends.JsonIndexBackend',
+    'relevance_radius_threshold': 0.35,
+    "keep_index_info": {'path_to_index_folder': os.path.join(BASE_DIR, "index_7500")},
     "db_backend": 'lsa.db.mysql.MySQLBackend',
     "db_credentials": {'db_name': db_settings["NAME"], 'user': db_settings["USER"],
                        'password': db_settings["PASSWORD"]},

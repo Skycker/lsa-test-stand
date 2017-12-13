@@ -13,6 +13,10 @@ class SearchResultInline(admin.TabularInline):
     model = models.SearchResult
     ordering = ("engine", "position",)
     extra = 0
+    readonly_fields = ("position", "document", "relevance", 'engine', )
+
+    def has_add_permission(self, request):
+        return False
 
 
 @admin.register(models.SearchQuery)
@@ -21,12 +25,21 @@ class SearchQueryAdmin(admin.ModelAdmin):
     search_fields = ("query", "ip")
     list_filter = ("created_at",)
     inlines = [SearchResultInline]
+    actions = ["calculate_metrics"]
+
+    def calculate_metrics(self, request, queryset):
+        for item in queryset:
+            item.calc_metrics()
+    calculate_metrics.short_description = "Пересчитать метрики качества"
 
 
 @admin.register(models.SearchResult)
 class SearchResult(admin.ModelAdmin):
     list_display = ("search_query", "document", "engine", "relevance")
     list_filter = ("engine", "relevance")
+
+    def get_queryset(self, request):
+        return super(SearchResult, self).get_queryset(request).select_related("document")
 
 
 admin.site.register(models.DocumentGroup)
